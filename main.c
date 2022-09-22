@@ -1,34 +1,33 @@
-#include "./fractal.h"
+#include "./headers/fractal.h"
+#include <stdio.h>
 
 
-int z_calc(double r, double im, int max) {
+double abs(double n) {
+    if (n < 0.0)
+        return n * -1;
+    return n;
+}
+
+
+int z_calc(complex *number) {
     int i = 0; 
-    double x = 0, y = 0;
-    while (((pow(x,2) + pow(y, 2)) <= 4) && (i < max)) {
-        double x_new = pow(x,2) - pow(y, 2) + r; 
-        y = 2 * x * y + im; 
-        x = x_new; 
+    double z = 0.0;
+    while (abs(z) <= 2 && i < MAX) {
+        z = z * z + number->real + number->imaginary; 
         i++;
-    } 
+    }
     return i;
 }
 
 
 int main(int argc, char *argv[]) {
-    int pos_h;
-    int pos_w;
+    complex n;
 
-    pos_h = 0;
-    pos_w = 0; 
-    int max = 100;
-    while (pos_h < HEIGHT)
-    {
-        while(pos_w < WIDTH) {
-            double c_re = ( pos_h - WIDTH/2.0  ) * 4.0 / WIDTH; 
-            double c_im = ( pos_w - HEIGHT/2.0 ) * 4.0 / WIDTH;
-            printf("%d\n", z_calc(c_re, c_im, max));
-            pos_w++;
-        }
-        pos_h++;
+for (int row = 0; row < HEIGHT; row += 1) 
+    for (int col = 0; col < WIDTH; col += 1) {
+        n.real = (col ) / WIDTH;
+        n.imaginary = (row ) / WIDTH;
+        printf("(%.2f %.2fi) %d\n", n.real, n.imaginary, z_calc(&n));
+
     }
 }
